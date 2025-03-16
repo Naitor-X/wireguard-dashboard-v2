@@ -12,12 +12,15 @@ class Settings(BaseSettings):
     PORT: int = 8000
     
     # CORS-Konfiguration
-    CORS_ORIGINS: List[AnyHttpUrl] = ["http://frontend:3000"]
+    CORS_ORIGINS: List[str] = ["http://frontend:3000"]
     
     # JWT-Konfiguration
     JWT_SECRET_KEY: str = "CHANGE_ME_IN_PRODUCTION"  # In Produktion ändern!
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    
+    # Datenbank-Konfiguration
+    DATABASE_URL: str = "postgresql://postgres:postgres@db:5432/wireguard"
     
     class Config:
         case_sensitive = True
