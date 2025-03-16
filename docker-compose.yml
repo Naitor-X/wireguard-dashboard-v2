@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://backend:8000
+    networks:
+      admin_net:
+        ipv4_address: 10.10.10.220
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - HOST=0.0.0.0
+      - PORT=8000
+      - CORS_ORIGINS=["http://frontend:3000"]
+    networks:
+      admin_net:
+        ipv4_address: 10.10.10.221
+
+networks:
+  admin_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.10.0/24 

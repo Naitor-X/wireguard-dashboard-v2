@@ -1,0 +1,27 @@
+---
+description: using this techstack only
+globs: 
+alwaysApply: false
+---
+## Frontend
+- React (für eine moderne, reaktive Benutzeroberfläche)
+
+## Backend
+- FastAPI (Python-basiertes API-Framework)
+
+## Deployment
+- Docker-Container im Admin-Subnetz (10.10.10.0/24)
+
+## Authentifizierung & Sicherheit
+- Einfache Passwortauthentifizierung
+- Zugangsbeschränkung auf das Admin-Subnetz
+
+## Datenspeicherung
+- JSON-Dateien für Statusdaten
+- Bestehende WireGuard-Konfigurationsdateien
+
+## Umgebung
+- Läuft auf Ubuntu 22.04.5 LTS Server (VM)
+- Integriert mit bestehender WireGuard- und UFW-Konfiguration
+
+Diese Technologien wurden ausgewählt, um die bestehende WireGuard-Infrastruktur mit einer benutzerfreundlichen Verwaltungsoberfläche zu erweitern.

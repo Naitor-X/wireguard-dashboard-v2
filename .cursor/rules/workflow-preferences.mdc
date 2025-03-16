@@ -1,0 +1,13 @@
+---
+description: Coding Workflo Preferneces
+globs: 
+alwaysApply: false
+---
+# Coding workflow preferences
+
+- Focus on the areas of code relevant to the task
+- Do not touch code that is unrelated to the task
+- do not change versions of implemented frameworks etc - only if really necessary - make sure, the whole project has the same versions of the implemented tech (framework, etc)
+- Write thorough tests for all major functionality
+- Avoid making major changes to the patterns and architecture of how a feature works, after it has shown to work well, unless explicitly structed
+- Always think about what other methods and areas of code might be affected by code changes
