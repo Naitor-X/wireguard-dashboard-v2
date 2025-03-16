@@ -25,6 +25,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./backend:/app
+      - /etc/wireguard:/etc/wireguard:ro
+    user: root
     ports:
       - "8000:8000"
     environment:
