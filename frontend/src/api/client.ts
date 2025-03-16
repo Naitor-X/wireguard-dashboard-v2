@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// Vite verwendet VITE_ als Präfix für Umgebungsvariablen
+const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000';
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -9,29 +10,10 @@ export const apiClient = axios.create({
   },
 });
 
-// Request Interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response Interceptor
+// Response Interceptor für allgemeine Fehlerbehandlung
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
     return Promise.reject(error);
   }
 ); 

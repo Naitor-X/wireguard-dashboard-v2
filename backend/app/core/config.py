@@ -11,11 +11,6 @@ class Settings(BaseSettings):
     # CORS-Einstellungen
     CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:3000"]
     
-    # JWT-Einstellungen
-    JWT_SECRET_KEY: str = "your-secret-key-here"  # In Produktion durch sichere Umgebungsvariable ersetzen
-    JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 Stunden
-    
     # Datenbank-Einstellungen
     POSTGRES_SERVER: str = "db"
     POSTGRES_USER: str = "postgres"

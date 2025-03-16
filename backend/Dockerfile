@@ -21,11 +21,10 @@ RUN mkdir -p /etc/wireguard && \
     chmod 750 /etc/wireguard && \
     chown root:root /etc/wireguard
 
-# Erstelle einen nicht-root Benutzer
-RUN useradd -m -U -u 1000 wireguard && \
-    chown -R wireguard:wireguard /app
-
-# Setze den Benutzer auf root für WireGuard-Zugriff
+# Wir verwenden den root-Benutzer für WireGuard-Zugriff
 USER root
+
+# Definiere Volume-Mountpoints explizit
+VOLUME ["/app", "/etc/wireguard"]
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 

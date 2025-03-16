@@ -7,12 +7,11 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend:/app
-      - /app/node_modules
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - REACT_APP_API_URL=http://backend:8000
+      - VITE_API_URL=http://backend:8000
     networks:
       admin_net:
         ipv4_address: 10.10.10.220
@@ -38,14 +37,12 @@ services:
       - PORT=8000
       - CORS_ORIGINS=["http://frontend:3000"]
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/wireguard
-      - JWT_SECRET_KEY=dev_secret_key
-      - JWT_ALGORITHM=HS256
-      - ACCESS_TOKEN_EXPIRE_MINUTES=30
     networks:
       admin_net:
         ipv4_address: 10.10.10.221
     depends_on:
       - db
+    restart: always
 
   db:
     image: postgres:13

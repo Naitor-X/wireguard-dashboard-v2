@@ -1,10 +1,11 @@
-FROM node:18-alpine
+FROM node:18-bullseye
 
 WORKDIR /app
 
 COPY package*.json ./
 COPY tsconfig*.json ./
 
+# Installiere die Abhängigkeiten
 RUN npm install
 
 COPY . .

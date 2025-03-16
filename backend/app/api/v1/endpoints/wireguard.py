@@ -1,6 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from app.api.deps import get_current_active_user
-from app.models.user import User
+from fastapi import APIRouter, HTTPException, status
 from app.services.wireguard_monitor import WireGuardMonitor
 from app.schemas.wireguard import WireGuardStatus
 from typing import Dict, Any
@@ -17,12 +15,10 @@ wireguard_monitor = WireGuardMonitor(
 )
 
 @router.get("/status", response_model=WireGuardStatus)
-async def get_wireguard_status(
-    current_user: User = Depends(get_current_active_user)
-):
+async def get_wireguard_status():
     """
     Gibt den aktuellen WireGuard-Status zurück.
-    Nur für authentifizierte Benutzer verfügbar.
+    Für alle Benutzer verfügbar.
     """
     try:
         wg_status = await wireguard_monitor.get_current_status()

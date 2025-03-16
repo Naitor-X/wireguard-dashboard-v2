@@ -9,22 +9,6 @@ class WireGuardException(HTTPException):
     ):
         super().__init__(status_code=status_code, detail=detail)
 
-class AuthenticationError(WireGuardException):
-    """Exception für Authentifizierungsfehler"""
-    def __init__(self, detail: str = "Authentifizierung fehlgeschlagen"):
-        super().__init__(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=detail
-        )
-
-class AuthorizationError(WireGuardException):
-    """Exception für Autorisierungsfehler"""
-    def __init__(self, detail: str = "Keine Berechtigung für diese Operation"):
-        super().__init__(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=detail
-        )
-
 class ResourceNotFoundError(WireGuardException):
     """Exception für nicht gefundene Ressourcen"""
     def __init__(self, detail: str = "Ressource nicht gefunden"):
