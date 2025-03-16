@@ -9,22 +9,22 @@ from app.db.init_db import init_db
 from app.db.session import SessionLocal
 from app.models.user import Base
 from app.api.v1.endpoints.wireguard import wireguard_monitor
+from app.api.endpoints import clients
 
 # Globale Variable für die Monitor-Task
 monitor_task = None
 
 def create_application() -> FastAPI:
     app = FastAPI(
-        title=settings.PROJECT_NAME,
-        version=settings.VERSION,
-        docs_url="/docs",
-        redoc_url="/redoc",
+        title="WireGuard Dashboard API",
+        description="REST API für das WireGuard Dashboard",
+        version="1.0.0"
     )
 
     # CORS-Middleware
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.CORS_ORIGINS],
+        allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -32,6 +32,7 @@ def create_application() -> FastAPI:
 
     # Router einbinden
     app.include_router(api_v1_router, prefix=settings.API_V1_STR)
+    app.include_router(clients.router, prefix="/api", tags=["clients"])
 
     @app.on_event("startup")
     async def startup_event():

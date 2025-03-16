@@ -4,26 +4,26 @@ from pydantic import AnyHttpUrl
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "WireGuard Dashboard"
-    VERSION: str = "0.1.0"
+    VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
-    
     ENVIRONMENT: str = "development"
-    HOST: str = "0.0.0.0"
-    PORT: int = 8000
     
-    # CORS-Konfiguration
-    CORS_ORIGINS: List[str] = ["http://frontend:3000"]
+    # CORS-Einstellungen
+    CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:3000"]
     
-    # JWT-Konfiguration
-    JWT_SECRET_KEY: str = "CHANGE_ME_IN_PRODUCTION"  # In Produktion ändern!
+    # JWT-Einstellungen
+    JWT_SECRET_KEY: str = "your-secret-key-here"  # In Produktion durch sichere Umgebungsvariable ersetzen
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 Stunden
     
-    # Datenbank-Konfiguration
-    DATABASE_URL: str = "postgresql://postgres:postgres@db:5432/wireguard"
-    
+    # Datenbank-Einstellungen
+    POSTGRES_SERVER: str = "db"
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_DB: str = "wireguard"
+    SQLALCHEMY_DATABASE_URI: str = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}/{POSTGRES_DB}"
+
     class Config:
         case_sensitive = True
-        env_file = ".env"
 
 settings = Settings() 

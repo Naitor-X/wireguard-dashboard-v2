@@ -5,6 +5,32 @@ from pathlib import Path
 from app.services.wireguard_monitor import WireGuardMonitor
 from app.core.logging import logger
 
+# Simulierte WireGuard-Daten für Testzwecke
+SIMULATED_WG_DUMP = """ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCD	PRIVKEY	51820	off
+PEER1PUBLICKEY0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMN	(none)	192.168.1.100:51820	10.10.10.2/32	1647432000	1024	2048	25
+PEER2PUBLICKEY0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMN	(none)	192.168.1.101:51820	10.10.11.2/32	1647432100	2048	4096	25
+"""
+
+class MockWireGuardMonitor(WireGuardMonitor):
+    """Eine Mock-Version des WireGuard-Monitors für Testzwecke."""
+    
+    async def _check_status(self):
+        """Überschreibt die Statusabfrage mit simulierten Daten."""
+        try:
+            # Verwende simulierte Daten
+            status_data = self._parse_wg_dump(SIMULATED_WG_DUMP)
+            
+            # Speichere die Statusdaten
+            await self._save_status(status_data)
+            
+            # Prüfe auf Änderungen
+            if self._has_status_changed(status_data):
+                logger.info(f"WireGuard-Status für {self.interface} hat sich geändert.")
+                self.last_status = status_data
+        
+        except Exception as e:
+            logger.error(f"Fehler bei der Statusabfrage: {e}")
+
 async def main():
     # Erstelle ein temporäres Verzeichnis für die Statusdaten
     temp_dir = Path("/tmp/wireguard-monitor-example")
@@ -12,8 +38,8 @@ async def main():
     
     logger.info(f"Verwende temporäres Verzeichnis: {temp_dir}")
     
-    # Erstelle eine Instanz des WireGuard-Monitors
-    monitor = WireGuardMonitor(
+    # Erstelle eine Instanz des Mock-WireGuard-Monitors
+    monitor = MockWireGuardMonitor(
         interface="wg0",
         status_dir=str(temp_dir),
         check_interval=5,  # Kürzeres Intervall für das Beispiel

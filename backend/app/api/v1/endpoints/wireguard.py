@@ -25,13 +25,13 @@ async def get_wireguard_status(
     Nur für authentifizierte Benutzer verfügbar.
     """
     try:
-        status = await wireguard_monitor.get_current_status()
-        if not status:
+        wg_status = await wireguard_monitor.get_current_status()
+        if not wg_status:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Keine Statusdaten verfügbar"
             )
-        return status
+        return wg_status
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

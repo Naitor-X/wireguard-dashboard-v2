@@ -25,4 +25,7 @@ RUN mkdir -p /etc/wireguard && \
 RUN useradd -m -U -u 1000 wireguard && \
     chown -R wireguard:wireguard /app
 
-CMD ["python", "-m", "app.examples.wireguard_live_example"] 
+# Setze den Benutzer auf root für WireGuard-Zugriff
+USER root
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 

@@ -27,6 +27,9 @@ services:
       - ./backend:/app
       - /etc/wireguard:/etc/wireguard:ro
     user: root
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
     ports:
       - "8000:8000"
     environment:
@@ -64,4 +67,5 @@ networks:
         - subnet: 10.10.10.0/24
 
 volumes:
-  postgres_data: 
+  postgres_data:
+    driver: local 

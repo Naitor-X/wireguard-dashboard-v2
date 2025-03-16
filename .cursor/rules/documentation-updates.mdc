@@ -1,0 +1,7 @@
+---
+description: Documentation Update
+globs: 
+alwaysApply: false
+---
+- **Rule:** After the implementation of new features, the `readme.md` must be updated to document the new functionalities and their usage.
+- **Goal:** Ensure that the documentation is always current and informs users about new features.
