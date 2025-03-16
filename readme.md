@@ -1,5 +1,7 @@
 # WireGuard Dashboard - Dokumentation
 
+Deployment !
+
 ## Aktueller Entwicklungsstatus
 
 Das WireGuard Dashboard ist ein Projekt zur Überwachung und Verwaltung von WireGuard VPN-Verbindungen. Es besteht aus einem Backend (FastAPI) und einem Frontend (React mit TypeScript), die über Docker containerisiert werden.

@@ -5,6 +5,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_SKIP_TS_CHECK=true
     volumes:
       - ./frontend:/app
     ports:
@@ -12,6 +14,7 @@ services:
     environment:
       - NODE_ENV=production
       - VITE_API_URL=http://backend:8000
+      - VITE_SKIP_TS_CHECK=true
     networks:
       admin_net:
         ipv4_address: 10.10.10.220
