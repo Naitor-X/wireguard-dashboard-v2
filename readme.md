@@ -7,46 +7,57 @@ Das WireGuard Dashboard ist ein Projekt zur Überwachung und Verwaltung von Wire
 ## Implementierte Features
 
 ### Backend (FastAPI)
-1. **Authentifizierung**: 
-   - JWT-basierte Authentifizierung mit Login-Endpunkt
-   - Benutzermodell mit Rollen und Berechtigungen
-
-2. **WireGuard-Monitoring**:
+1. **WireGuard-Monitoring**:
    - Automatische Überwachung des WireGuard-Interfaces (wg0)
    - Statusabfrage über API-Endpunkt
    - Regelmäßige Statusaktualisierung im Hintergrund
 
-3. **Datenbank-Integration**:
-   - PostgreSQL-Datenbank für Benutzer und Konfigurationsdaten
+2. **Datenbank-Integration**:
+   - PostgreSQL-Datenbank für Konfigurationsdaten
    - SQLAlchemy ORM für Datenbankzugriff
    - Alembic für Datenbankmigrationen
 
-4. **API-Endpunkte**:
+3. **API-Endpunkte**:
    - `/api/v1/health`: Gesundheitscheck
-   - `/api/v1/auth`: Authentifizierungsendpunkte (Login, etc.)
    - `/api/v1/wireguard/status`: WireGuard-Statusabfrage
    
-   **Neue Client-Management API**:
+   **Client-Management API**:
    - `GET /api/clients`: Liste aller Clients mit Pagination und Status
    - `GET /api/client/{id}`: Detail-Informationen eines Clients
    - `POST /api/client`: Neue Client-Konfiguration erstellen
-   - `DELETE /api/client/{id}`: Client löschen (mit Authentifizierung)
+   - `DELETE /api/client/{id}`: Client löschen
    - `GET /api/status`: System-Status und Statistiken
+
+4. **Sichere Systemoperationen**:
+   - Schlüsselgenerierung
+   - Konfigurationsdatei-Erstellung
+   - Sichere Dateisystem-Operationen
+   - WireGuard-Neustarts/Updates
+   - Backup-Funktionalität
 
 ### Frontend (React/TypeScript)
 1. **Benutzeroberfläche**:
    - Material-UI als UI-Framework
    - Responsive Design
-   - Geschützte Routen mit Authentifizierung
 
 2. **Funktionen**:
-   - Login-Seite mit Formularvalidierung
    - Dashboard zur Anzeige des WireGuard-Status
    - React Query für API-Abfragen und Caching
 
-3. **State Management**:
-   - Redux für globalen Zustand
-   - React Query für Server-State
+3. **Komponenten**:
+   - Layout-Komponenten für die Anwendungsstruktur
+   - Feedback-Komponenten für Benachrichtigungen und Fehlerzustände
+   - UI-Komponenten für einheitliches Design
+
+## Entfernte Features
+
+Die folgenden Features wurden aus dem Projekt entfernt:
+
+1. **Authentifizierung**:
+   - JWT-basierte Authentifizierung
+   - Login-Endpunkt
+   - Benutzermodell mit Rollen und Berechtigungen
+   - Geschützte Routen im Frontend
 
 ## Projektstruktur
 
@@ -56,19 +67,22 @@ Das WireGuard Dashboard ist ein Projekt zur Überwachung und Verwaltung von Wire
 backend/
 ├── app/                      # Hauptanwendungsverzeichnis
 │   ├── api/                  # API-Definitionen
+│   │   ├── endpoints/        # API-Endpunkte
+│   │   │   └── clients.py    # Client-Management-Endpunkte
 │   │   └── v1/               # API Version 1
 │   │       ├── endpoints/    # API-Endpunkte
-│   │       │   ├── auth.py   # Authentifizierungsendpunkte
 │   │       │   ├── health.py # Gesundheitscheck
+│   │       │   ├── system_operations.py # Systemoperationen
 │   │       │   └── wireguard.py # WireGuard-Endpunkte
 │   │       └── api.py        # API-Router
 │   ├── core/                 # Kernfunktionalität
 │   ├── db/                   # Datenbankzugriff
+│   ├── docs/                 # Dokumentation
 │   ├── models/               # Datenbankmodelle
 │   ├── schemas/              # Pydantic-Schemas
 │   ├── services/             # Dienste
-│   │   └── wireguard_monitor.py # WireGuard-Überwachung
 │   ├── utils/                # Hilfsfunktionen
+│   ├── wireguard/            # WireGuard-spezifische Funktionen
 │   └── main.py               # Hauptanwendungsdatei
 ├── Dockerfile                # Docker-Konfiguration
 └── requirements.txt          # Python-Abhängigkeiten
@@ -81,18 +95,19 @@ frontend/
 ├── src/                      # Quellcode
 │   ├── api/                  # API-Client
 │   ├── components/           # Wiederverwendbare Komponenten
-│   │   └── Layout.tsx        # Hauptlayout
+│   │   ├── common/           # Allgemeine Komponenten
+│   │   ├── feedback/         # Feedback-Komponenten
+│   │   ├── layout/           # Layout-Komponenten
+│   │   │   └── MainLayout.tsx # Hauptlayout
+│   │   └── ui/               # UI-Komponenten
 │   ├── features/             # Feature-Module
 │   ├── hooks/                # Benutzerdefinierte React-Hooks
 │   ├── pages/                # Seitenkomponenten
 │   │   ├── Dashboard.tsx     # Dashboard-Seite
-│   │   ├── Login.tsx         # Login-Seite
 │   │   └── NotFound.tsx      # 404-Seite
 │   ├── services/             # Dienste
-│   │   └── auth.ts           # Authentifizierungsdienst
-│   ├── store/                # Redux-Store
+│   ├── store/                # State-Management
 │   ├── styles/               # Styling
-│   │   └── theme.ts          # Material-UI-Theme
 │   ├── types/                # TypeScript-Typdefinitionen
 │   ├── utils/                # Hilfsfunktionen
 │   ├── App.tsx               # Hauptanwendungskomponente
@@ -107,7 +122,6 @@ frontend/
 - **FastAPI**: Modernes, schnelles Web-Framework für Python
 - **SQLAlchemy**: ORM für Datenbankzugriff
 - **Pydantic**: Datenvalidierung und -serialisierung
-- **JWT**: Token-basierte Authentifizierung
 - **PostgreSQL**: Relationale Datenbank
 
 ### Frontend
@@ -116,26 +130,40 @@ frontend/
 - **Material-UI**: UI-Komponentenbibliothek
 - **React Router**: Routing-Bibliothek
 - **React Query**: Datenabfrage und -caching
-- **Redux Toolkit**: State-Management
 - **Axios**: HTTP-Client
 
 ### Infrastruktur
 - **Docker**: Containerisierung
 - **Docker Compose**: Multi-Container-Orchestrierung
 
-## Aktueller Status und nächste Schritte
+## Sichere Systemoperationen
 
-Das Projekt befindet sich in der Entwicklungsphase mit grundlegenden Funktionen:
-- Authentifizierung ist implementiert
-- WireGuard-Statusabfrage ist funktionsfähig
-- Grundlegende UI ist vorhanden
+Die folgenden sicheren Systemoperationen wurden implementiert:
 
-Mögliche nächste Schritte:
-1. Implementierung von Benutzer- und Peer-Verwaltung
-2. Erweiterung des Dashboards mit detaillierten Statistiken
-3. Implementierung von Konfigurationsänderungen über die UI
-4. Hinzufügen von Benachrichtigungen bei Verbindungsproblemen
-5. Verbesserung der Sicherheit und Zugriffskontrollen
+### 1. Schlüsselgenerierung
+- Sichere Generierung von privaten, öffentlichen und Preshared-Keys
+- Verwendung von WireGuard-Kommandozeilentools mit Fallback auf kryptografisch sichere Python-Funktionen
+- Sichere Speicherung von Schlüsseln mit minimalen Berechtigungen
+
+### 2. Konfigurationsdatei-Erstellung
+- Sichere Erstellung von Server- und Client-Konfigurationsdateien
+- Verwendung von temporären Dateien und atomaren Operationen
+- Sichere Berechtigungen für Konfigurationsdateien
+
+### 3. Sichere Dateisystem-Operationen
+- Sichere Lese-, Schreib- und Löschoperationen
+- Sicheres Löschen durch mehrfaches Überschreiben mit Zufallsdaten
+- Prüfung und Korrektur von Dateiberechtigungen
+
+### 4. WireGuard-Neustarts/Updates
+- Sichere Neustarts von WireGuard-Interfaces
+- Sichere Updates von WireGuard-Konfigurationen
+- Automatische Backups vor Konfigurationsänderungen
+
+### 5. Backup-Funktionalität
+- Erstellung, Auflistung und Wiederherstellung von Backups
+- Sichere Speicherung von Backups mit Zeitstempel
+- Sichere Wiederherstellung mit Backup der aktuellen Konfiguration
 
 ## API-Dokumentation
 
@@ -207,4 +235,38 @@ Liefert System-Status und Statistiken.
 }
 ```
 
-Diese Dokumentation bietet einen Überblick über den aktuellen Stand des WireGuard Dashboard-Projekts und seine Komponenten.
+### System-Operationen API
+
+- `POST /api/v1/system/keys/generate`: Generiert ein neues WireGuard-Schlüsselpaar
+- `POST /api/v1/system/config/server`: Erstellt eine neue WireGuard-Serverkonfigurationsdatei
+- `POST /api/v1/system/config/client`: Erstellt eine neue WireGuard-Clientkonfigurationsdatei
+- `POST /api/v1/system/wireguard/restart/{interface}`: Startet ein WireGuard-Interface neu
+- `GET /api/v1/system/backups`: Listet alle verfügbaren Backups auf
+- `POST /api/v1/system/backups/restore`: Stellt eine WireGuard-Konfiguration aus einem Backup wieder her
+- `POST /api/v1/system/backups/create/{interface}`: Erstellt ein Backup der aktuellen WireGuard-Konfiguration
+
+## Installation und Ausführung
+
+### Voraussetzungen
+- Docker und Docker Compose
+- WireGuard-Installation auf dem Host-System
+
+### Ausführung
+1. Repository klonen
+2. `docker-compose up -d` ausführen
+3. Frontend unter http://localhost:3000 aufrufen
+4. Backend-API unter http://localhost:8000 verfügbar
+
+## Aktueller Status und nächste Schritte
+
+Das Projekt befindet sich in der Entwicklungsphase mit grundlegenden Funktionen:
+- WireGuard-Statusabfrage ist funktionsfähig
+- Client-Management ist implementiert
+- Grundlegende UI ist vorhanden
+
+Mögliche nächste Schritte:
+1. Erweiterung des Dashboards mit detaillierten Statistiken
+2. Verbesserung der Benutzeroberfläche
+3. Implementierung von Benachrichtigungen bei Verbindungsproblemen
+4. Hinzufügen von Benutzerauthentifizierung (optional)
+5. Verbesserung der Sicherheit und Zugriffskontrollen

@@ -6,11 +6,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Provider } from 'react-redux';
 import { theme } from './styles/theme';
 import { store } from './store';
-import MainLayout from './components/layout/MainLayout';
 import ErrorBoundary from './components/feedback/ErrorBoundary';
 import { ToastProvider } from './components/feedback/Toast';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
+import { Box } from '@mui/material';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,41 +31,19 @@ function App() {
           <ToastProvider>
             <ErrorBoundary>
               <Router>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <MainLayout>
-                        <Dashboard />
-                      </MainLayout>
-                    }
-                  />
-                  <Route 
-                    path="/clients" 
-                    element={
-                      <MainLayout title="Clients">
-                        <div>Clients-Seite</div>
-                      </MainLayout>
-                    } 
-                  />
-                  <Route 
-                    path="/server" 
-                    element={
-                      <MainLayout title="Server">
-                        <div>Server-Seite</div>
-                      </MainLayout>
-                    } 
-                  />
-                  <Route 
-                    path="/settings" 
-                    element={
-                      <MainLayout title="Einstellungen">
-                        <div>Einstellungen-Seite</div>
-                      </MainLayout>
-                    } 
-                  />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                <Box sx={{ 
+                  minHeight: '100vh', 
+                  backgroundColor: '#f5f7fa', 
+                  p: { xs: 2, sm: 3 },
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'flex-start'
+                }}>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Box>
               </Router>
             </ErrorBoundary>
           </ToastProvider>
